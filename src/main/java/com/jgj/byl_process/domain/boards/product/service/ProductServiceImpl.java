@@ -38,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
 
         List<ImageResource> imageResourceList = new ArrayList<>();
 
-        final String fixedStringPath = "/Users/majin-u/Desktop/JoGuangJo/frontend/JoGuangJo-Front/src/assets/productImgs";
+        final String fixedStringPath = "E:/Project/JoGuangJo-Front/src/assets/productImgs";
 
         Product product = new Product();
 
