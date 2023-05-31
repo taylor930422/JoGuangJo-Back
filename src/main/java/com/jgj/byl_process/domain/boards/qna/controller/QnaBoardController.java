@@ -28,6 +28,9 @@ public class QnaBoardController {
     public void qnaBoardRegister(
             @RequestPart(value = "imageFileList", required = false) List<MultipartFile> imageFileList,
             @RequestPart(value = "qnaInfo") QnaBoardRequest qnaBoardRequest) {
+        if (imageFileList == null) {
+            imageFileList = new ArrayList<>();
+        }
 
         qnaBoardService.register(imageFileList, qnaBoardRequest);
     }
@@ -50,6 +53,10 @@ public class QnaBoardController {
             @PathVariable("qnaBoardId") Long qnaBoardId,
             @RequestPart(value = "imageFileList", required = false) List<MultipartFile> imageFileList,
             @RequestPart(value = "qnaInfo") QnaBoardRequest qnaBoardRequest) {
+
+        if (imageFileList == null) {
+            imageFileList = new ArrayList<>();
+        }
 
         return qnaBoardService.modify(qnaBoardId, imageFileList, qnaBoardRequest);
     }
