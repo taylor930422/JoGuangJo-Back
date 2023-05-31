@@ -90,11 +90,11 @@ public class QnaBoardServiceImpl implements QnaBoardService {
         List<String> maybeQnaBoardImgList = qnaBoardImgRepository.findImagePathByQnaBoardId(qnaBoardId);
 
         QnaBoard qnaBoard = maybeQnaBoard.get();
-        List<String> imgPaths = new ArrayList<>();
+        List<String> imageResourcePaths = new ArrayList<>();
 
         for (String imgPath : maybeQnaBoardImgList) {
             String fileName = imgPath.substring(imgPath.lastIndexOf("/") + 1);
-            imgPaths.add(fileName);
+            imageResourcePaths.add(fileName);
         }
 
         return new QnaBoardReadResponse(
@@ -102,7 +102,7 @@ public class QnaBoardServiceImpl implements QnaBoardService {
                 qnaBoard.getTitle(),
                 qnaBoard.getWriter(),
                 qnaBoard.getContent(),
-                imgPaths,
+                imageResourcePaths,
                 qnaBoard.getRegDate()
         );
     }
