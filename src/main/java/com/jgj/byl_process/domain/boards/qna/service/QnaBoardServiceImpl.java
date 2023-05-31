@@ -76,32 +76,19 @@ public void register(List<MultipartFile> imageFileList, QnaBoardRequest qnaBoard
     qnaBoardImgRepository.saveAll(qnaBoardImgResourcesList);
 }
 
-//    @Override
-//    public List<QnaBoardImgResponse> findQnaBoardImage(Long qnaBoardId) {
-//        List<QnaBoardImgResource> qnaBoardImgResources = qnaBoardImgRepository.findImagePathByQnaBoardId(qnaBoardId);
-//        List<QnaBoardImgResponse> qnaBoardImgResponses = new ArrayList<>();
-//
-//        for (QnaBoardImgResource qnaBoardImgResource: qnaBoardImgResources) {
-//
-//            qnaBoardImgResponses.add(new QnaBoardImgResponse(
-//                    qnaBoardImgResource.getImageResourcePath()));
-//        }
-//
-//        return qnaBoardImgResponses;
-//    }
-    @Override
     public List<QnaBoardListResponse> list() {
-        List<QnaBoard> QnaBoardList = qnaBoardRepository.findAll();
-        List<QnaBoardListResponse> QnaBoardResponseList = new ArrayList<>();
+        Sort sort = Sort.by(Sort.Direction.DESC, "qnaBoardId");
+        List<QnaBoard> qnaBoardList = qnaBoardRepository.findAll(sort);
+        List<QnaBoardListResponse> qnaBoardResponseList = new ArrayList<>();
 
-        for (QnaBoard QnaBoard: QnaBoardList) {
-            QnaBoardResponseList.add(new QnaBoardListResponse(
-                    QnaBoard.getQnaBoardId(), QnaBoard.getTitle(),
-                    QnaBoard.getWriter(), QnaBoard.getRegDate()
+        for (QnaBoard qnaBoard : qnaBoardList) {
+            qnaBoardResponseList.add(new QnaBoardListResponse(
+                    qnaBoard.getQnaBoardId(), qnaBoard.getTitle(),
+                    qnaBoard.getWriter(), qnaBoard.getRegDate()
             ));
         }
 
-        return QnaBoardResponseList;
+        return qnaBoardResponseList;
     }
 
     @Override
