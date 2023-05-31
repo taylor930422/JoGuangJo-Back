@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -38,20 +37,19 @@ public class QnaBoardServiceImpl implements QnaBoardService {
         qnaBoard.setTitle(qnaBoardRequest.getTitle());
         qnaBoard.setWriter(qnaBoardRequest.getWriter());
 
+        // base64로 디코딩 하지 않고, 단순히 <img> <p> 태그 제거 후 저장
         String content = qnaBoardRequest.getContent();
-
         content = content.replaceAll("<img[^>]*>", "");
         content = content.replaceAll("<p>", "");
         content = content.replaceAll("</p>", "");
-
-        // base64로 디코딩 하지 않고, 단순히 <img> <p> 태그 제거 후 저장
         qnaBoard.setContent(content);
 
         for (MultipartFile file : imageFileList) {
             String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
             String filepath = uploadPath + "/" + filename;
 
-            // 이미지 파일을 디스크에 저장
+            // transferTo : 이미지 파일을 지정된 경로에 저장하는 메소드
+            // filepath로 지정된 파일 경로에 대한 파일 객체를 생성한다.
             try {
                 file.transferTo(new File(filepath));
             } catch (IOException e) {
