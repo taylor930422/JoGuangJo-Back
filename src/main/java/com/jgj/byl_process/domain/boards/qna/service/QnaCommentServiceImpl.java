@@ -7,7 +7,6 @@ import com.jgj.byl_process.domain.boards.qna.entity.QnaComment;
 import com.jgj.byl_process.domain.boards.qna.repository.QnaBoardRepository;
 import com.jgj.byl_process.domain.boards.qna.repository.QnaCommentRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,18 +15,21 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class QnaCommentServiceImpl implements QnaCommentService{
+public class QnaCommentServiceImpl implements QnaCommentService {
 
-    @Autowired
-    QnaCommentRepository qnaCommentRepository;
+    final private QnaCommentRepository qnaCommentRepository;
 
-    @Autowired
-    QnaBoardRepository qnaBoardRepository;
+    final private QnaBoardRepository qnaBoardRepository;
+
+    public QnaCommentServiceImpl(QnaCommentRepository qnaCommentRepository,
+                                 QnaBoardRepository qnaBoardRepository) {
+        this.qnaCommentRepository = qnaCommentRepository;
+        this.qnaBoardRepository = qnaBoardRepository;
+    }
 
     @Override
     public List<QnaCommentListResponse> qnaCommentList(Long qnaBoardId) {
-        List<QnaComment> QnaCommentList = qnaCommentRepository.findAllCommentByQnaBoardId(qnaBoardId);
-        // 그냥 코멘트 다꺼냄
+        List<QnaComment> QnaCommentList = qnaCommentRepository.findAll();
         List<QnaCommentListResponse> QnaCommentResponseList = new ArrayList<>();
 
         for (QnaComment QnaComment : QnaCommentList) {
@@ -38,8 +40,9 @@ public class QnaCommentServiceImpl implements QnaCommentService{
                 ));
             }
         }
-            return QnaCommentResponseList;
+        return QnaCommentResponseList;
     }
+
     @Override
     public void qnaCommentRegister(QnaCommentRequest commentRequest) {
         Optional<QnaBoard> maybeQnaBoard = qnaBoardRepository.findById(commentRequest.getQnaBoardId());
@@ -54,7 +57,8 @@ public class QnaCommentServiceImpl implements QnaCommentService{
 
     @Override
     public QnaComment modify(Long qnaCommentId, QnaCommentRequest qnaCommentRequest) {
-        QnaComment qnaComment = qnaCommentRepository.findById(qnaCommentId).orElseThrow(() -> new IllegalArgumentException("해당 댓글 존재안함." + qnaCommentId));
+        QnaComment qnaComment = qnaCommentRepository.findById(qnaCommentId)
+                .orElseThrow(() -> new IllegalArgumentException(String.valueOf(qnaCommentId)));
 
         qnaComment.update(qnaCommentRequest.getComment());
 
@@ -64,6 +68,7 @@ public class QnaCommentServiceImpl implements QnaCommentService{
 
     @Override
     public void remove(Long qnaCommentId) {
+
         qnaCommentRepository.deleteById(qnaCommentId);
     }
 }
